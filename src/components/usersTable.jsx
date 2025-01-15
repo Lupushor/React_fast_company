@@ -1,37 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
-import User from "./user";
+// import User from "./user";
+import TableHeader from "./tableHeader";
+import TableBody from "./tableBody";
 
-const UserTable = ({ users, onSort, ...rest }) => {
+const UserTable = ({ users, onSort, selectedSort, ...rest }) => {
+  const columns = {
+    index: { name: "#" },
+    name: { path: "name", name: "Имя" },
+    qualities: { name: "Качества" },
+    profession: { path: "profession.name", name: "Профессия" },
+    completedMeetings: { path: "completedMeetings", name: "Встретился, раз" },
+    rate: { path: "rate", name: "Оценка" },
+    bookmark: { path: "bookmark", name: "Избранное" },
+    delete: {},
+  };
   return (
     <table className="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th onClick={() => onSort("name")} scope="col">
-            Имя
-          </th>
-          <th scope="col">Качества</th>
-          <th onClick={() => onSort("profession.name")} scope="col">
-            Профессия
-          </th>
-          <th onClick={() => onSort("completedMeetings")} scope="col">
-            Встретился, раз
-          </th>
-          <th onClick={() => onSort("rate")} scope="col">
-            Оценка
-          </th>
-          <th onClick={() => onSort("bookmark")} scope="col">
-            Избранное
-          </th>
-          <th />
-        </tr>
-      </thead>
-      <tbody>
+      <TableHeader {...{ onSort, selectedSort, columns }} />
+      <TableBody {...{ columns, data: users }} />
+      {/* <tbody>
         {users.map((user, index) => (
           <User key={user._id} {...rest} {...user} index={index} />
         ))}
-      </tbody>
+      </tbody> */}
     </table>
   );
 };
@@ -39,6 +31,7 @@ const UserTable = ({ users, onSort, ...rest }) => {
 UserTable.propTypes = {
   users: PropTypes.array.isRequired,
   onSort: PropTypes.func.isRequired,
+  selectedSort: PropTypes.object.isRequired,
 };
 
 export default UserTable;
