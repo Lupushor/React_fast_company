@@ -15,7 +15,7 @@ const Users = ({ users, ...rest }) => {
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
 
-  const pageSize = 4;
+  const pageSize = 8;
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfessions(data));
@@ -47,7 +47,7 @@ const Users = ({ users, ...rest }) => {
   const itemsCount = filteredUsers.length;
 
   // const sortedUsers = api.users.fetchAll();
-  const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]); //["asc"] - ascending (По алфавиту), ["desc"] - descending (В обратном порядке)
+  const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]); //["asc"] - ascending (По алфавиту), ["desc"] - descending (В обратном порядке)
 
   const userCrop = paginate(sortedUsers, currentPage, pageSize);
 

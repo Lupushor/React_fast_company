@@ -17,12 +17,31 @@ import _ from "lodash";
 // };
 
 const TableBody = ({ data, columns }) => {
+  const renderContent = (item, column) => {
+    if (columns[column].component) {
+      const component = columns[column].component;
+      if (typeof component === "function") {
+        return component(item);
+      }
+      return component;
+    }
+    return _.get(item, columns[column].path);
+  };
+
   return (
     <tbody>
-      {data.map((item) => (
+      {data.map((item, index) => (
         <tr key={item._id}>
           {Object.keys(columns).map((column) => (
-            <td key={column}>{_.get(item, columns[column].path)}</td>
+            <td key={column}>
+              {columns[column].name === "#"
+                ? index + 1
+                : renderContent(item, column)}
+              {/* Этот код отображает строку таблицы для каждого элемента в массиве данных.
+                  Для каждого столбца он проверяет, определен ли пользовательский компонент в объекте columns.
+                  Если пользовательский компонент определен, он отображает этот компонент.
+                  В противном случае он извлекает значение из объекта item, используя путь, указанный в объекте columns. */}
+            </td>
           ))}
         </tr>
       ))}
