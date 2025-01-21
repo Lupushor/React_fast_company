@@ -27,7 +27,25 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
             scope="col"
           >
             {columns[column].name}
+            {columns[column].path && (
+              <i
+                className={
+                  "bi bi-caret-" +
+                  (selectedSort.path === columns[column].path
+                    ? selectedSort.order === "asc"
+                      ? "up"
+                      : "down"
+                    : "") +
+                  "-fill"
+                }
+              ></i>
+            )}
           </th>
+
+          // className={
+          //   "list-group-item" +
+          //   (currentItem === selectedItem ? " active" : "")
+          // }
         ))}
         {/* <th scope="col">#</th> */}
         {/* <th onClick={() => handleSort("name")} scope="col">
