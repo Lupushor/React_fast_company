@@ -9,6 +9,14 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
     });
   };
 
+  //2 вариант
+  const renderSortArrow = (selectedSort, currentPath) => {
+    if (selectedSort.path !== currentPath) return null;
+    if (selectedSort.order === "asc")
+      return <i className="bi bi-caret-up-fill"></i>;
+    return <i className="bi bi-caret-down-fill"></i>;
+  };
+
   return (
     <thead>
       <tr>
@@ -27,7 +35,9 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
             scope="col"
           >
             {columns[column].name}
-            {columns[column].path && (
+
+            {/* //1 вариант */}
+            {/* {columns[column].path && (
               <i
                 className={
                   "bi bi-caret-" +
@@ -39,7 +49,10 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
                   "-fill"
                 }
               ></i>
-            )}
+            )} */}
+
+            {/* //2 вариант */}
+            {renderSortArrow(selectedSort, columns[column].path)}
           </th>
 
           // className={
