@@ -5,13 +5,13 @@ import { useParams } from "react-router-dom";
 
 const Users = () => {
   const params = useParams();
-  const { userID } = params;
+  const { userId } = params;
 
   return (
     <>
-      {userID ? (
+      {userId ? (
         <>
-          <UserPage />
+          <UserPage userId={userId} />
         </>
       ) : (
         <UsersList />
