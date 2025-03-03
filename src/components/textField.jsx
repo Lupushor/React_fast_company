@@ -1,18 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 const TextField = ({ label, type, name, value, onChange, error }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword((prevState) => !prevState);
+  };
+
   return (
-    <div>
+    <div className="mb-4">
       <label htmlFor={name}>{label}</label>
-      <input
-        id={name}
-        type={type}
-        value={value}
-        onChange={onChange}
-        name={name}
-      />
-      {error && <div className="text-danger">{error}</div>}
+      <div className="input-group has-validation">
+        <input
+          id={name}
+          type={showPassword ? "text" : type}
+          value={value}
+          onChange={onChange}
+          name={name}
+          className={`form-control ${error ? "is-invalid" : ""}`}
+        />
+        {type === "password" && (
+          <div className="input-group-append">
+            <span
+              className="input-group-text"
+              onClick={toggleShowPassword}
+              style={{ cursor: "pointer" }}
+            >
+              {showPassword ? "🙈" : "👁️"}
+            </span>
+          </div>
+        )}
+        {error && <div className="invalid-feedback">{error}</div>}
+      </div>
     </div>
   );
 };

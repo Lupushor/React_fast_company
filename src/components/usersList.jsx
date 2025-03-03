@@ -12,6 +12,7 @@ import _ from "lodash";
 const UsersList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfessions] = useState();
+  const [searchQuery, setSearchQuary] = useState("");
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
   const [users, setUsers] = useState();
@@ -39,7 +40,7 @@ const UsersList = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedProf]);
+  }, [selectedProf, searchQuery]);
 
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
@@ -47,6 +48,12 @@ const UsersList = () => {
 
   const handleProfessionalSelect = (item) => {
     setSelectedProf(item);
+    if (searchQuery !== "") setSearchQuary("");
+  };
+
+  const handleSearchQuery = ({ target }) => {
+    setSelectedProf(undefined);
+    setSearchQuary(target.value);
   };
 
   const handleSort = (item) => {
@@ -54,7 +61,11 @@ const UsersList = () => {
   };
 
   if (users) {
-    const filteredUsers = selectedProf
+    const filteredUsers = searchQuery
+      ? users.filter((user) =>
+          user.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : selectedProf
       ? users.filter(
           (user) =>
             JSON.stringify(user.profession) === JSON.stringify(selectedProf)
@@ -84,6 +95,15 @@ const UsersList = () => {
         )}
         <div className="d-flex flex-column">
           <SearchStatus length={itemsCount} />
+          <input
+            className="form-control me-2"
+            type="search"
+            name="searchQuery"
+            placeholder="Введите запрос"
+            onChange={handleSearchQuery}
+            aria-label="Search"
+            value={searchQuery}
+          ></input>
           {itemsCount > 0 && (
             <UsersTable
               users={userCrop}
