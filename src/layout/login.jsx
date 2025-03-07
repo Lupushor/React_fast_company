@@ -1,95 +1,53 @@
-import React, { useEffect, useState } from "react";
-import TextField from "../components/textField";
-import { validator } from "../utils/validator";
+import React, { useState } from "react";
+import LoginForm from "../components/ui/loginForm";
+import { useParams } from "react-router";
+import RegisterForm from "../components/ui/registerForm";
 
 const Login = () => {
-  const [data, setData] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({});
+  const { type } = useParams();
+  const [formType, setFormType] = useState(
+    type === "register" ? type : "login"
+  );
 
-  const handleChange = ({ target }) => {
-    setData((prevState) => ({ ...prevState, [target.name]: target.value }));
-    // setData(e.target.name);
-    console.log(target.name);
-  };
-
-  const validatorConfig = {
-    email: {
-      isRequired: { message: "Email is required" },
-      isEmail: { message: "Email is not correct" },
-    },
-    password: {
-      isRequired: { message: "Password is required" },
-      isCapitalSymbol: {
-        message: "Password must contain at least one capital letter",
-      },
-      isContainDigit: { message: "Password must contain at least one digit" },
-      min: { message: "Password must contain at least 8 characters", value: 8 },
-    },
-  };
-
-  useEffect(() => {
-    validate();
-  }, [data]);
-
-  const validate = () => {
-    const errors = validator(data, validatorConfig);
-
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const isValid = Object.keys(errors).length === 0;
-
-  const handleSubmit = (e) => {
-    console.log(e);
-
-    e.preventDefault();
-
-    const isValidate = validate();
-    if (!isValidate) return;
-
-    console.log(data);
+  const toggleFormType = () => {
+    setFormType((prevState) => (prevState === "login" ? "register" : "login"));
   };
 
   return (
     <div className="container mt-5">
       <div className="row">
         <div className="col-md-6 offset-md-3 shadow p-4">
-          <h3 className="mb-4">Login</h3>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              label="Электронная почта"
-              name="email"
-              value={data.email}
-              onChange={handleChange}
-              error={errors.email}
-            />
-            <TextField
-              label="Пароль"
-              type="password"
-              name="password"
-              value={data.password}
-              onChange={handleChange}
-              error={errors.password}
-            />
-            {/* <div>
-        <div>
-          <input type="radio" id="radio1" name="radio" />{" "}
-          <label htmlFor="radio1">Radio 1</label>
-        </div>
-        <div>
-          <input type="radio" id="radio2" name="radio" />{" "}
-          <label htmlFor="radio2">Radio 2</label>
-        </div>
-      </div> */}
-            <button
-              className="btn btn-primary w-100 mx-auto"
-              type="submit"
-              disabled={!isValid}
-            >
-              Login
-            </button>
-          </form>
+          {formType === "register" ? (
+            <>
+              <h3 className="mb-4">Register</h3>
+              <RegisterForm />
+              <p>
+                Already have account?{" "}
+                <a
+                  className="link-primary"
+                  role="button"
+                  onClick={toggleFormType}
+                >
+                  Sign In
+                </a>
+              </p>
+            </>
+          ) : (
+            <>
+              <h3 className="mb-4">Login</h3>
+              <LoginForm />
+              <p>
+                Dont have account?{" "}
+                <a
+                  className="link-primary"
+                  role="button"
+                  onClick={toggleFormType}
+                >
+                  Sign In
+                </a>
+              </p>
+            </>
+          )}
         </div>
       </div>
     </div>
