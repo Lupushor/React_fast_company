@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
+import api from "../../api";
 
 const RegisterForm = () => {
-  const [data, setData] = useState({ email: "", password: "" });
+  const [data, setData] = useState({ email: "", password: "", profession: "" });
   const [errors, setErrors] = useState({});
+  const [professions, setProfessions] = useState();
+
+  useEffect(() => {
+    api.professions.fetchAll().then((data) => setProfessions(data));
+  }, []);
 
   const handleChange = ({ target }) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
@@ -68,16 +74,30 @@ const RegisterForm = () => {
         onChange={handleChange}
         error={errors.password}
       />
-      {/* <div>
-              <div>
-                <input type="radio" id="radio1" name="radio" />{" "}
-                <label htmlFor="radio1">Radio 1</label>
-              </div>
-              <div>
-                <input type="radio" id="radio2" name="radio" />{" "}
-                <label htmlFor="radio2">Radio 2</label>
-              </div>
-            </div> */}
+
+      <div className="mb-4">
+        <label htmlFor="validationCustom04" className="form-label">
+          State
+        </label>
+        <select className="form-select" id="validationCustom04" required>
+          <option selected={data.profession === ""} disabled value="">
+            Choose...
+          </option>
+          {professions &&
+            professions.map((profession) => (
+              <option
+                key={profession._id}
+                selected={profession._id === data.profession}
+                value={profession._id}
+              >
+                {profession.name}
+              </option>
+            ))}
+          <option value="_id">...</option>
+        </select>
+        <div className="invalid-feedback">Please select a valid state.</div>
+      </div>
+
       <button
         className="btn btn-primary w-100 mx-auto"
         type="submit"

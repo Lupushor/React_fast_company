@@ -34,6 +34,7 @@ const UsersListPage = () => {
       )
     );
   };
+
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfessions(data));
   }, []);
