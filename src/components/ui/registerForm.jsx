@@ -2,15 +2,20 @@ import React, { useEffect, useState } from "react";
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
 import api from "../../api";
+import SelectField from "../common/form/selectField";
 
 const RegisterForm = () => {
   const [data, setData] = useState({ email: "", password: "", profession: "" });
   const [errors, setErrors] = useState({});
-  const [professions, setProfessions] = useState();
+  const [professions, setProfessions] = useState([]);
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfessions(data));
   }, []);
+
+  useEffect(() => {
+    console.log(professions);
+  }, [professions]);
 
   const handleChange = ({ target }) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
@@ -30,6 +35,9 @@ const RegisterForm = () => {
       },
       isContainDigit: { message: "Password must contain at least one digit" },
       min: { message: "Password must contain at least 8 characters", value: 8 },
+    },
+    profession: {
+      isRequired: { message: "Profession is required" },
     },
   };
 
@@ -75,29 +83,15 @@ const RegisterForm = () => {
         error={errors.password}
       />
 
-      <div className="mb-4">
-        <label htmlFor="validationCustom04" className="form-label">
-          State
-        </label>
-        <select className="form-select" id="validationCustom04" required>
-          <option selected={data.profession === ""} disabled value="">
-            Choose...
-          </option>
-          {professions &&
-            professions.map((profession) => (
-              <option
-                key={profession._id}
-                selected={profession._id === data.profession}
-                value={profession._id}
-              >
-                {profession.name}
-              </option>
-            ))}
-          <option value="_id">...</option>
-        </select>
-        <div className="invalid-feedback">Please select a valid state.</div>
-      </div>
-
+      <SelectField
+        defaultOption="Choose..."
+        options={professions}
+        value={data.profession}
+        name="profession"
+        label="Выберите вашу профессию"
+        onChange={handleChange}
+        error={errors.profession}
+      />
       <button
         className="btn btn-primary w-100 mx-auto"
         type="submit"
