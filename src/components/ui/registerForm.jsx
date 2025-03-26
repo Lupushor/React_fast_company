@@ -5,6 +5,7 @@ import api from "../../api";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
+import CheckBoxField from "../common/form/checkBoxField";
 
 const RegisterForm = () => {
   const [data, setData] = useState({
@@ -13,6 +14,7 @@ const RegisterForm = () => {
     profession: "",
     sex: "Male",
     qualities: [],
+    licence: false,
   });
 
   const [qualities, setQualities] = useState([]);
@@ -28,12 +30,8 @@ const RegisterForm = () => {
     console.log(professions);
   }, [professions]);
 
-  const handleChange = ({ target }) => {
-    console.log(target);
-
-    if (target) {
-      setData((prevState) => ({ ...prevState, [target.name]: target.value }));
-    }
+  const handleChange = (target) => {
+    setData((prevState) => ({ ...prevState, [target.name]: target.value }));
   };
 
   const validatorConfig = {
@@ -51,6 +49,11 @@ const RegisterForm = () => {
     },
     profession: {
       isRequired: { message: "Profession is required" },
+    },
+    licence: {
+      isRequired: {
+        message: "You must agree with the license agreement",
+      },
     },
   };
 
@@ -95,7 +98,6 @@ const RegisterForm = () => {
         onChange={handleChange}
         error={errors.password}
       />
-
       <SelectField
         defaultOption="Choose..."
         options={professions}
@@ -115,8 +117,20 @@ const RegisterForm = () => {
         onChange={handleChange}
         label="Выберите ваш пол"
       />
-
-      <MultiSelectField options={qualities} onChange={handleChange} />
+      <MultiSelectField
+        options={qualities}
+        onChange={handleChange}
+        name="qualities"
+        label="Выберите ваши качеств"
+      />
+      <CheckBoxField
+        value={data.licence}
+        onChange={handleChange}
+        name="licence"
+        error={errors.licence}
+      >
+        Подтвердить <a>лицензионное соглашение</a>
+      </CheckBoxField>
 
       <button
         className="btn btn-primary w-100 mx-auto"

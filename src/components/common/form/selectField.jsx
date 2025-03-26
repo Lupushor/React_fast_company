@@ -9,6 +9,10 @@ const SelectField = ({
   options,
   error,
 }) => {
+  const handleChange = ({ target }) => {
+    onChange({ name: target.name, value: target.value });
+  };
+
   const optionsArray =
     !Array.isArray(options) && typeof options === "object"
       ? Object.keys(options).map((optionName) => ({
@@ -26,7 +30,7 @@ const SelectField = ({
         name="profession"
         id="validationCustom04"
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
       >
         <option disabled value="">
           {defaultOption}

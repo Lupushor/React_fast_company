@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
+import CheckBoxField from "../common/form/checkBoxField";
 
 const LoinForm = () => {
-  const [data, setData] = useState({ email: "", password: "" });
+  const [data, setData] = useState({ email: "", password: "", stayOn: false });
   const [errors, setErrors] = useState({});
 
-  const handleChange = ({ target }) => {
+  const handleChange = (target) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
-    // setData(e.target.name);
-    console.log(target.name);
   };
 
   const validatorConfig = {
@@ -68,16 +67,10 @@ const LoinForm = () => {
         onChange={handleChange}
         error={errors.password}
       />
-      {/* <div>
-            <div>
-              <input type="radio" id="radio1" name="radio" />{" "}
-              <label htmlFor="radio1">Radio 1</label>
-            </div>
-            <div>
-              <input type="radio" id="radio2" name="radio" />{" "}
-              <label htmlFor="radio2">Radio 2</label>
-            </div>
-          </div> */}
+
+      <CheckBoxField value={data.stayOn} onChange={handleChange} name="stayOn">
+        Оставаться в системе
+      </CheckBoxField>
       <button
         className="btn btn-primary w-100 mx-auto"
         type="submit"
