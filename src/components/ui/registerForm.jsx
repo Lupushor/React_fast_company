@@ -119,6 +119,7 @@ const RegisterForm = () => {
       />
       <MultiSelectField
         options={qualities}
+        defaultValue={data.qualities}
         onChange={handleChange}
         name="qualities"
         label="Выберите ваши качеств"
