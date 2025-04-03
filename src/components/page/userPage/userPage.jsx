@@ -12,7 +12,7 @@ const UserPage = ({ userId }) => {
   }, []);
 
   const handleClick = () => {
-    history.push("/users");
+    history.push(history.location.pathname + "/edit");
   };
 
   if (user) {
@@ -24,7 +24,7 @@ const UserPage = ({ userId }) => {
         <p>completedMeetings: {user.completedMeetings}</p>
         <h3>Rate: {user.rate}</h3>
         <button className="btn btn-primary" onClick={handleClick}>
-          All Users
+          Изменить
         </button>
       </div>
     );
