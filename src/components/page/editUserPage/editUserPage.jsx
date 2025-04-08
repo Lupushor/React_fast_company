@@ -168,7 +168,6 @@ const EditUserPage = () => {
                 options={[
                   { name: "Male", value: "male" },
                   { name: "Female", value: "female" },
-                  { name: "Other", value: "other" },
                 ]}
                 value={data.sex}
                 name="sex"
