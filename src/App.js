@@ -5,6 +5,7 @@ import NavBar from "./components/ui/navBar";
 import Login from "./layout/login";
 import Users from "./layout/users";
 import Main from "./layout/main";
+import { ToastContainer } from "react-toastify";
 
 // import Users from "./components/users";
 
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/" exact component={Main} />
         <Redirect to="/" />
       </Switch>
+      <ToastContainer />
     </main>
   );
 };
