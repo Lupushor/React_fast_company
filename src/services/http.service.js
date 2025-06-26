@@ -19,8 +19,20 @@ axios.interceptors.request.use(
   }
 );
 
+function transformData(data) {
+  return data
+    ? Object.keys(data).map((key) => ({
+        ...data[key],
+      }))
+    : [];
+}
+
 axios.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    res.data = { content: transformData(res.data) };
+    console.log("res.data: ", res.data);
+    return res;
+  },
   function (error) {
     const expectedErrors =
       error.response &&
