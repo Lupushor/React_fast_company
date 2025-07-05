@@ -26,7 +26,7 @@ const CheckBoxField = ({ name, value, onChange, children, error }) => {
 
 CheckBoxField.propTypes = {
   name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),

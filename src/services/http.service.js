@@ -30,7 +30,6 @@ function transformData(data) {
 axios.interceptors.response.use(
   (res) => {
     res.data = { content: transformData(res.data) };
-    console.log("res.data: ", res.data);
     return res;
   },
   function (error) {

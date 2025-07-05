@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-const TextField = ({ label, type, name, value, onChange, error }) => {
+const TextField = ({ label, type = "text", name, value, onChange, error }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = ({ target }) => {
@@ -41,13 +41,13 @@ const TextField = ({ label, type, name, value, onChange, error }) => {
   );
 };
 
-TextField.defaultProps = {
-  type: "text",
-};
+// TextField.defaultProps = {
+//   type: "text",
+// };
 
 TextField.propTypes = {
   label: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
