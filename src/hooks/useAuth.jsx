@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import userService from "../services/user.service";
 import { toast } from "react-toastify";
+import { setTokens } from "../services/localStorege.service";
 
 const httpAuth = axios.create();
 
@@ -17,8 +18,7 @@ const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   async function signUp({ email, password, ...rest }) {
-    const key = "AIzaSyC7MoXTfOZzhFDltsOeZDhrda2G_mPSPbA";
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${key}`;
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_API_KEY}`;
     try {
       const { data } = await httpAuth.post(url, {
         email,

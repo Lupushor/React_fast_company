@@ -6,6 +6,7 @@ import * as yup from "yup";
 // import { matches, set } from "lodash";
 
 const LoinForm = () => {
+  console.log(process.env.REACT_APP_FIREBASE_API_KEY);
   const [data, setData] = useState({ email: "", password: "", stayOn: false });
   const [errors, setErrors] = useState({});
 
