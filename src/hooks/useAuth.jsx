@@ -1,6 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import userService from "../services/user.service";
+import { toast } from "react-toastify";
+
+const httpAuth = axios.create();
 
 const AuthContext = React.createContext();
 
@@ -8,21 +12,75 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
+const TOKEN_KEY = "jwt-token";
+const REFRESH_TOKEN_KEY = "jwt-refresh-token";
+const EXPIRES_KEY = "jwt-expires";
+
 const AuthProvider = ({ children }) => {
-  async function signUp({ email, password }) {
-    const key = "AIzaSyC7MoXTfOZzhFDltsOeZDhrda2G_mPSPbA";
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${key}`;
-    const { data } = await axios.post(url, {
-      email,
-      password,
-      returnSecureToken: true,
-    });
-    console.log(data);
-    // Here you would typically handle the sign-up logic, e.g., API call
+  const [currentUser, setUser] = useState({});
+  const [error, setError] = useState(null);
+  function setTokens({ refreshToken, idToken, expiresIn = 3600 }) {
+    const expiresDate = new Date().getTime() + expiresIn * 1000;
+    localStorage.setItem(EXPIRES_KEY, expiresDate);
+    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+    localStorage.setItem(TOKEN_KEY, idToken);
   }
 
+  async function signUp({ email, password, ...rest }) {
+    const key = "AIzaSyC7MoXTfOZzhFDltsOeZDhrda2G_mPSPbA";
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${key}`;
+    try {
+      const { data } = await httpAuth.post(url, {
+        email,
+        password,
+        returnSecureToken: true,
+      });
+
+      setTokens(data);
+
+      await createUser({
+        _id: data.localId,
+        email,
+        ...rest,
+        // name: email.split("@")[0],
+        // completedMeetings: 0,
+        // image: `https://www.gravatar.com/avatar/${data.emailHash}?d=mp&s=100`,
+      });
+
+      console.log(data);
+      // Here you would typically handle the sign-up logic, e.g., API call
+    } catch (error) {
+      errorCatcher(error);
+    }
+  }
+
+  async function createUser(data) {
+    try {
+      const { content } = userService.create(data);
+      setUser(content);
+    } catch (error) {
+      errorCatcher(error);
+    }
+  }
+
+  function errorCatcher(error) {
+    const { message } = error.response
+      ? error.response.data
+      : { message: "An error occurred" };
+    setError(message);
+  }
+
+  useEffect(() => {
+    if (error !== null) {
+      toast(error);
+      setError(null);
+    }
+  }, [error]);
+
   return (
-    <AuthContext.Provider value={{ signUp }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ signUp, currentUser }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

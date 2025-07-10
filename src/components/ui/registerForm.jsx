@@ -20,7 +20,7 @@ const RegisterForm = () => {
     licence: false,
   });
 
-  const { singUp } = useAuth();
+  const { signUp } = useAuth();
 
   const { qualities } = useQuality();
   const qualitiesList = qualities.map((quality) => ({
@@ -34,7 +34,6 @@ const RegisterForm = () => {
     label: profession.name,
     value: profession._id,
   }));
-  console.log("professionsList", professionsList);
 
   const [errors, setErrors] = useState({});
 
@@ -139,7 +138,7 @@ const RegisterForm = () => {
     // });
 
     console.log(newData);
-    singUp(newData);
+    signUp(newData);
   };
 
   return (
