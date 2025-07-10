@@ -12,19 +12,9 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-const TOKEN_KEY = "jwt-token";
-const REFRESH_TOKEN_KEY = "jwt-refresh-token";
-const EXPIRES_KEY = "jwt-expires";
-
 const AuthProvider = ({ children }) => {
   const [currentUser, setUser] = useState({});
   const [error, setError] = useState(null);
-  function setTokens({ refreshToken, idToken, expiresIn = 3600 }) {
-    const expiresDate = new Date().getTime() + expiresIn * 1000;
-    localStorage.setItem(EXPIRES_KEY, expiresDate);
-    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-    localStorage.setItem(TOKEN_KEY, idToken);
-  }
 
   async function signUp({ email, password, ...rest }) {
     const key = "AIzaSyC7MoXTfOZzhFDltsOeZDhrda2G_mPSPbA";
