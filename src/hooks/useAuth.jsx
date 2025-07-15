@@ -32,15 +32,18 @@ const AuthProvider = ({ children }) => {
         _id: data.localId,
         email,
         ...rest,
-        // name: email.split("@")[0],
-        // completedMeetings: 0,
-        // image: `https://www.gravatar.com/avatar/${data.emailHash}?d=mp&s=100`,
       });
 
-      console.log(data);
       // Here you would typically handle the sign-up logic, e.g., API call
     } catch (error) {
       errorCatcher(error);
+      const { code, message } = error.response.data.error;
+      if (code === 400 && message === "EMAIL_EXISTS") {
+        const errorObject = {
+          email: "Email is already exist",
+        };
+        throw errorObject;
+      }
     }
   }
 
